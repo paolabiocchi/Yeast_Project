@@ -1,0 +1,50 @@
+Random forest, sans preprocessing :
+Mean Squared Error: 0.08084533613215243
+R² Score: 0.03084267054745371
+Calcul de l'importance des caractéristiques...
+
+Mutations ayant le plus d'impact sur le YPD doubling time :
+                  Feature  Importance
+198668   YKL218C_169_G->R    0.015733
+226553  YLR320W_1167_E->G    0.013914
+45711    YDL122W_355_S->N    0.010858
+199364   YKR003W_411_A->V    0.010144
+345258            YKL221W    0.009914
+313428   YOR346W_825_V->I    0.009464
+32090     YCL052C_29_T->I    0.008602
+1812      YAL028W_67_A->T    0.007506
+5196      YAR033W_59_G->A    0.006528
+166770   YJL045W_560_T->S    0.006041
+
+
+Avec une plage de YPD_doublingtime aussi limitée, une MSE de 0.0808 peut être considérée comme relativement élevée. Cela indique que les prédictions du modèle s’écartent souvent de manière significative des valeurs réelles dans cette plage étroite.
+Un R² de 0.0308 indique que le modèle explique seulement 3% de la variance dans les données. Cela signifie que la majeure partie des variations dans YPD_doublingtime est encore inexpliquée par les mutations incluses dans le modèle.
+Les mutations et les copy number variations seules ne suffisent peut-être pas pour expliquer YPD_doublingtime. D’autres facteurs biologiques ou environnementaux non inclus dans les données pourraient jouer un rôle important.
+Le grand nombre de features (348,522 colonnes) peut entraîner un sur-apprentissage ou une dilution des signaux importants.
+
+
+    Modèles plus adaptés :
+	•	Tester des modèles capables de mieux capturer les interactions complexes entre mutations, comme :
+	•	Gradient Boosting Machines (e.g., XGBoost, LightGBM).
+	•	Réseaux neuronaux, si vous disposez des ressources nécessaires.
+
+
+
+
+avec XGradient Bossting et K cross validation :
+Mean Squared Error: 0.08534176926831794
+R² Score: -0.02305964885393741
+Calcul de l'importance des caractéristiques...
+
+Mutations ayant le plus d'impact sur le YPD doubling time :
+                  Feature  Importance
+198668   YKL218C_169_G->R    0.015733
+226553  YLR320W_1167_E->G    0.013914
+45711    YDL122W_355_S->N    0.010858
+199364   YKR003W_411_A->V    0.010144
+345258            YKL221W    0.009914
+313428   YOR346W_825_V->I    0.009464
+32090     YCL052C_29_T->I    0.008602
+1812      YAL028W_67_A->T    0.007506
+5196      YAR033W_59_G->A    0.006528
+166770   YJL045W_560_T->S    0.006041
