@@ -15,6 +15,7 @@ import dask.dataframe as dd
 from sklearn.preprocessing import MinMaxScaler
 
 # %%
+'''
 # y prends la forme : yeast ID, doubling_time
 # Charger les datasets
 x_train = pd.read_csv("data/X_matrix.csv")
@@ -24,7 +25,7 @@ print("csv read complete")
 #check if the first columns is the same
 is_same = x_train.iloc[:, 0].equals(y_train.iloc[:, 0])
 print(f"Are the first columns the same? {is_same}")
-
+'''
 # %%
 
 def scale_last_columns(data, num_last_columns=7000):
@@ -169,8 +170,8 @@ def preprocessed_data (x_df, y_df) :
 
     return x_train, y_train
 
-x_train_preprocessed, _ = preprocessed_data (x_train, y_train)
-metrics(x_train, x_train_preprocessed)
+#x_train_preprocessed, _ = preprocessed_data (x_train, y_train)
+#metrics(x_train, x_train_preprocessed)
 
 
 
