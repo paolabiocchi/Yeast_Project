@@ -159,11 +159,22 @@ def metrics(x_train, x_train_preprocessed):
     print("\nVariance (original):", var_x_train)
     print("Variance (after preprocessing):", var_x_train_preprocessed)
 
+# Check for NaN values
+def has_nan(df):
+    has_nan = df.isnull().values.any()
+
+    if has_nan:
+        print("The DataFrame contains NaN values.")
+    else:
+        print("The DataFrame does not contain any NaN values.")
 
 def preprocessed_data (x_df, y_df) :
     x_train = x_df
+    has_nan(x_train)
     x_train = scale_last_columns(x_train)
+    has_nan(x_train)
     x_train = remove_low_variance_features_last_columns(x_train)
+    has_nan(x_train)
     x_train = apply_pca_last_columns(x_train)
 
     y_train= y_df
