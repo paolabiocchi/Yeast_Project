@@ -133,3 +133,39 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 LASSO model avec preprocessing de pao:
 Mean Squared Error (MSE): 0.073898
 R² Score: -0.001491
+
+
+
+GBM with preprocessing like the github :
+Mean Squared Error: 1.637230
+R² Score: 0.062717
+Mutations ayant le plus d'impact sur le YPD doubling time :
+                 Feature  Importance
+8629    YBL047C_893_D->E    0.044870
+209742  YLL049W_148_L->V    0.039871
+346696           YNL170W    0.028020
+344427           YHR043C    0.020636
+185942  YJR151C_849_I->V    0.017846
+346850           YNL336W    0.016635
+347480           YOR392W    0.015586
+346924           YNR072W    0.014553
+328742  YPL222W_406_L->M    0.013385
+347478           YOR388C    0.013237
+
+
+
+GBM with our preprocessing :
+Mean Squared Error: 0.071883
+R² Score: 0.025821
+Mutations ayant le plus d'impact sur le YPD doubling time :
+                 Feature  Importance
+155095    YIL063C_8_N->D    0.204877
+221409    YLR205C_5_S->N    0.108073
+231023  YLR417W_172_Q->R    0.106771
+341937            PCA_37    0.085211
+198423  YKL213C_635_K->R    0.064854
+45842    YDL124W_92_T->P    0.049449
+153087   YIL026C_51_T->P    0.048682
+201601  YKR036C_482_T->A    0.045564
+41762   YDL045C_294_V->I    0.045180
+341950            PCA_50    0.042305
