@@ -22,23 +22,7 @@ import dask.dataframe as dd
 from sklearn.preprocessing import MinMaxScaler
 
 
-X_file = "data/X_matrix.csv"
-Y_file = "data/Y_matrix.csv"
 
-print("Loading the data...")
-X = pd.read_csv(X_file)
-Y = pd.read_csv(Y_file)
-
-# Ensure Yeast_ID is a string type
-X['Yeast_ID'] = X['Yeast_ID'].astype(str)
-Y['Yeast_ID'] = Y['Yeast_ID'].astype(str)
-
-# Find the intersection of Yeast_ID in both files
-common_yeasts = set(X['Yeast_ID']).intersection(set(Y['Yeast_ID']))
-
-# Identify Yeast_IDs that are missing in each file
-missing_in_X = set(Y['Yeast_ID']) - set(X['Yeast_ID'])
-missing_in_Y = set(X['Yeast_ID']) - set(Y['Yeast_ID'])
 
 def scale_last_columns(data, num_mutations=341901):
     """
@@ -181,5 +165,13 @@ def preprocessed_data (x_df, y_df) :
     return x_train, y_df
 
 
-#X_data_f, y_data_f = preprocessed_data(X_data, y_data)
+'''
+X_file = "data/X_matrix.csv"
+Y_file = "data/Y_matrix.csv"
 
+print("Loading the data...")
+X_df = pd.read_csv(X_file)
+Y_df = pd.read_csv(Y_file)
+X_data_f, y_data_f = preprocessed_data(X_df, y_df)
+
+'''
