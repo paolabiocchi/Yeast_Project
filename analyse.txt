@@ -128,3 +128,8 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 45896    YDL127W_180_K->I    0.008396
 138038  YHL030W_1282_L->W    0.007985
 247803  YMR105W-A_60_I->F    0.006896
+
+
+LASSO model avec preprocessing de pao:
+Mean Squared Error (MSE): 0.073898
+R² Score: -0.001491
