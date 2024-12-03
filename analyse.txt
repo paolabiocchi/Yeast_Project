@@ -48,3 +48,24 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 1812      YAL028W_67_A->T    0.007506
 5196      YAR033W_59_G->A    0.006528
 166770   YJL045W_560_T->S    0.006041
+
+
+
+
+Random forest, avec preprocessing de Pao :
+Mean Squared Error: 0.08249086202879267
+R² Score: 0.011116443162784262
+Calcul de l'importance des caractéristiques...
+
+Mutations ayant le plus d'impact sur le YPD doubling time :
+                  Feature  Importance
+198668   YKL218C_169_G->R    0.017795
+226553  YLR320W_1167_E->G    0.016718
+1812      YAL028W_67_A->T    0.010006
+313428   YOR346W_825_V->I    0.009600
+41281    YDL039C_246_V->A    0.008995
+32090     YCL052C_29_T->I    0.008602
+45711    YDL122W_355_S->N    0.008518
+138038  YHL030W_1282_L->W    0.008302
+199364   YKR003W_411_A->V    0.006849
+5196      YAR033W_59_G->A    0.006528
