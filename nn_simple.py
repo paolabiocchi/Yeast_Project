@@ -77,7 +77,6 @@ param_grid = {
 }
 
 
-
 # GridSearchCV 
 grid_search = GridSearchCV(net, param_grid=param_grid, cv=KFold(n_splits=6), scoring='neg_mean_squared_error', n_jobs=-1)
 grid_search.fit(x_data_f1.values.astype(np.float32), y_data_f1.values.astype(np.float32))
@@ -104,19 +103,21 @@ best_net.fit(x_data_f1.values.astype(np.float32), y_data_f1.values.astype(np.flo
 
 Y_pred = best_net.predict(x_data_f1.values.astype(np.float32))
 
-# Evaluate the model for the train data
-mse = mean_squared_error(y_data_f1, Y_pred)
-print(f'Mean Squared Error: {mse}')
-
 id_array = np.arange(1, len(Y_pred)+1)
 final_df = pd.DataFrame({
     'ID': id_array,
     'division_rate': Y_pred.flatten()
 })
 
+#pour que ça run tout en même temps
+from sklearn.metrics import mean_squared_error, r2_score
+mse = mean_squared_error(y_data_f1, Y_pred)
+print(f'Mean Squared Error: {mse}')
+r2 = r2_score(y_data_f1, Y_pred)
+print(f'R2 score: {r2}')
+
 # Save the new DataFrame to a CSV file
 final_csv = final_df.to_csv("Data\\results_nn3.csv", index=False)
-
 
 # Extract training and validation loss for a plot
 train_losses = best_net.history[:, 'train_loss']
@@ -129,3 +130,42 @@ plt.ylabel('Negative Mean Squared Error')
 plt.title('Training and Validation Loss per Epoch')
 plt.legend()
 plt.savefig("Data\\NNplot_nn3.png")
+
+'''
+In a neural network, you don't directly get "feature importances" like in tree-based models (e.g., Random Forest or XGBoost). 
+However, you can estimate feature importance by analyzing how sensitive the model's predictions are to changes in each feature. 
+This method is often referred to as "permutation importance" or "feature sensitivity analysis."
+
+Here's a Python script to compute and visualize the top 10 most important features based on permutation importance:
+'''
+
+from sklearn.inspection import permutation_importance
+
+# Calculate permutation importance
+results = permutation_importance(
+    best_net,  # Trained model
+    x_data_f1.values.astype(np.float32),  # Input data
+    y_data_f1.values.astype(np.float32),  # Target values
+    scoring="neg_mean_squared_error",  # Scoring metric
+    n_repeats=10,  # Number of permutations
+    random_state=42  # For reproducibility
+)
+
+# Create a DataFrame for feature importance
+feature_importances = pd.DataFrame({
+    "Feature": x_data_f1.columns,
+    "Importance": results.importances_mean
+}).sort_values(by="Importance", ascending=False)
+
+# Select the top 10 features
+top_10_features = feature_importances.head(10)
+
+# Plot the top 10 features
+plt.figure(figsize=(10, 6))
+plt.barh(top_10_features["Feature"], top_10_features["Importance"], align="center")
+plt.gca().invert_yaxis()  # Highest importance on top
+plt.xlabel("Mean Importance")
+plt.title("Top 10 Most Important Features")
+plt.tight_layout()
+plt.savefig("Data\\Feature_Importance_Plot.png")
+plt.show()
