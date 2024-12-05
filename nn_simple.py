@@ -70,9 +70,9 @@ net = NeuralNetRegressor(
 
 #parameter grid
 param_grid = {
-    'module__dropout_rate': [0.01, 0.013, 0.018],
-    'lr': [0.0002, 0.0003, 0.0004],
-    'max_epochs': [68, 70, 73],
+    'module__dropout_rate': [0.008, 0.009, 0.01],
+    'lr': [0.00014, 0.00015, 0.00016],
+    'max_epochs': [69, 70, 71],
     'optimizer': [optim.Adam],
 }
 
