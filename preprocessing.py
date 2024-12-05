@@ -141,12 +141,12 @@ def apply_pca_last_columns(data, num_last_columns=7000, n_components=0.95, norma
     # Plot explained variance
     #visualize_pca_variance(pca, title="Explained Variance by PCA Components")
 
-    """
+    
     # Normalize the PCA-transformed features if specified
     if normalize:
         scaler = MinMaxScaler()
         reduced_data = scaler.fit_transform(reduced_data)
-    """
+    
     # Create a new DataFrame for the reduced PCA data
     reduced_columns = [f'PCA_{i+1}' for i in range(reduced_data.shape[1])]
     reduced_df = pd.DataFrame(reduced_data, columns=reduced_columns, index=data.index)
