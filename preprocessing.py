@@ -1,11 +1,3 @@
-import dask.dataframe as dd
-import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import cross_val_score, KFold
-from xgboost import XGBRegressor
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import re
@@ -20,11 +12,44 @@ from sklearn.feature_selection import VarianceThreshold
 from sklearn.decomposition import TruncatedSVD
 import dask.dataframe as dd
 from sklearn.preprocessing import MinMaxScaler
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
+def plot_histograms(data, title, bins=50, figsize=(12, 6)):
+    """
+    Plot histograms of all numerical columns in the DataFrame.
+    """
+    plt.figure(figsize=figsize)
+    data.hist(bins=bins, figsize=figsize)
+    plt.suptitle(title, fontsize=16)
+    plt.tight_layout()
+    plt.show()
 
+def plot_correlation_matrix(data, title, figsize=(10, 8)):
+    """
+    Plot a heatmap of the correlation matrix.
+    """
+    corr_matrix = data.corr()
+    plt.figure(figsize=figsize)
+    sns.heatmap(corr_matrix, cmap="coolwarm", center=0, annot=False, fmt=".2f")
+    plt.title(title, fontsize=16)
+    plt.show()
 
-def scale_last_columns(data, num_mutations=341901):
+def visualize_pca_variance(pca, title):
+    """
+    Plot the explained variance ratio of PCA components.
+    """
+    explained_variance = np.cumsum(pca.explained_variance_ratio_)
+    plt.figure(figsize=(10, 6))
+    plt.plot(explained_variance, marker='o')
+    plt.xlabel('Number of Components')
+    plt.ylabel('Cumulative Explained Variance')
+    plt.title(title)
+    plt.grid()
+    plt.show()
+
+def scale_last_columns(data, num_last_columns=7000):
     """
     Scales the last N columns (assumed to be CNVs) to a range of 0 to 1.
     
@@ -36,33 +61,37 @@ def scale_last_columns(data, num_mutations=341901):
         pd.DataFrame: Data with the last columns scaled.
     """
     # Select the last N columns
-    cnv_columns = data.iloc[:, num_mutations:]
+    cnv_columns = data.iloc[:, -num_last_columns:]
     
     # Scale these columns
     scaler = MinMaxScaler()
     scaled_cnv = scaler.fit_transform(cnv_columns)
     
     # Replace the last N columns with their scaled values
-    data.iloc[:, num_mutations:] = scaled_cnv
+    data.iloc[:, -num_last_columns:] = scaled_cnv
+
+    # Plot after scaling
+    plot_histograms(data.iloc[:, -num_last_columns:], title="After Scaling CNVs")
+    
     
     return data
 
 
-def remove_low_variance_features_last_columns(data, num_mutations=341901, threshold=0.05):
+def remove_low_variance_features_last_columns(data, num_last_columns=7000, threshold=0.05):
     """
     Removes features with variance below a specified threshold in the last N columns.
     This has been done already for mutations during our extraction of data, so it is only useful to do it for the copy number variation columns.
     
     Parameters:
         data (pd.DataFrame): Input data.
-        num_mutations (int): Number of mutations to not apply variance filtering.
+        num_last_columns (int): Number of columns from the end to apply variance filtering.
         threshold (float): Minimum variance a feature must have to be retained.
 
     Returns:
         pd.DataFrame: Data with low-variance features removed in the last N columns.
     """
     # Select the last N columns
-    target_columns = data.iloc[:, num_mutations:]
+    target_columns = data.iloc[:, -num_last_columns:]
     
     # Apply VarianceThreshold to these columns
     selector = VarianceThreshold(threshold=threshold)
@@ -71,16 +100,25 @@ def remove_low_variance_features_last_columns(data, num_mutations=341901, thresh
     # Get the selected column indices
     selected_columns = target_columns.columns[selector.get_support()]
     
-    # Ensure new DataFrame has the correct index
-    reduced_data_df = pd.DataFrame(reduced_data, columns=selected_columns, index=target_columns.index)
-    
     # Replace the last N columns with the reduced set
-    data = pd.concat([data.iloc[:, :num_mutations], reduced_data_df], axis=1)
+    data = data.drop(columns=target_columns.columns)  # Drop the original last N columns
+    data = pd.concat([data, pd.DataFrame(reduced_data, columns=selected_columns)], axis=1)
     
+    """
+    # Plot variance after filtering
+    reduced_variances = pd.DataFrame(reduced_data).var(axis=0)
+    plt.figure(figsize=(12, 6))
+    plt.hist(reduced_variances, bins=50, color="orange")
+    plt.title("Variance of Last Columns (After Filtering)")
+    plt.xlabel("Variance")
+    plt.ylabel("Frequency")
+    plt.show()
+    """
+
     return data
 
 
-def apply_pca_last_columns(data, num_mutations=341901, n_components=0.95, normalize=True):
+def apply_pca_last_columns(data, num_last_columns=7000, n_components=0.95, normalize=True):
     """
     Applies PCA to reduce dimensionality of the last N columns of the dataset.
     
@@ -93,13 +131,17 @@ def apply_pca_last_columns(data, num_mutations=341901, n_components=0.95, normal
         pd.DataFrame: Data with PCA applied to the last N columns.
     """
     # Separate the last N columns and the rest of the dataset
-    other_columns = data.iloc[:, :num_mutations]
-    target_columns = data.iloc[:, num_mutations:]
+    other_columns = data.iloc[:, :-num_last_columns]
+    target_columns = data.iloc[:, -num_last_columns:]
     
     # Apply PCA to the last N columns
     pca = PCA(n_components=n_components)
     reduced_data = pca.fit_transform(target_columns)
 
+    # Plot explained variance
+    #visualize_pca_variance(pca, title="Explained Variance by PCA Components")
+
+    
     # Normalize the PCA-transformed features if specified
     if normalize:
         scaler = MinMaxScaler()
@@ -157,21 +199,46 @@ def metrics(x_train, x_train_preprocessed):
     print("\nVariance (original):", var_x_train)
     print("Variance (after preprocessing):", var_x_train_preprocessed)
 
+
+def shuffle_dataset(data, labels):
+    """
+    Shuffle the dataset and labels together to randomize the order of examples.
+    
+    Parameters:
+        data (pd.DataFrame): Features dataset.
+        labels (pd.DataFrame): Labels dataset.
+
+    Returns:
+        Tuple: Shuffled features and labels.
+    """
+    combined = pd.concat([data, labels], axis=1)
+    shuffled = combined.sample(frac=1, random_state=42).reset_index(drop=True)
+    
+    # Separate features and labels again
+    shuffled_data = shuffled.iloc[:, :-labels.shape[1]]
+    shuffled_labels = shuffled.iloc[:, -labels.shape[1]:]
+    
+    return shuffled_data, shuffled_labels
+
+
+def has_nan(df):
+    has_nan = df.isnull().values.any()
+
+    if has_nan:
+        print("The DataFrame contains NaN values.")
+    else:
+        print("The DataFrame does not contain any NaN values.")
+
+
 def preprocessed_data (x_df, y_df) :
-    x_train_scaled = scale_last_columns(x_df)
-    x_train_lv = remove_low_variance_features_last_columns(x_train_scaled)
-    x_train = apply_pca_last_columns(x_train_lv)
 
-    return x_train, y_df
+    x_df = scale_last_columns(x_df)
+    has_nan(x_df)
+    x_df = remove_low_variance_features_last_columns(x_df)
+    has_nan(x_df)
+    x_df = apply_pca_last_columns(x_df)
+    has_nan(x_df)
 
-
-'''
-X_file = "data/X_matrix.csv"
-Y_file = "data/Y_matrix.csv"
-
-print("Loading the data...")
-X_df = pd.read_csv(X_file)
-Y_df = pd.read_csv(Y_file)
-X_data_f, y_data_f = preprocessed_data(X_df, y_df)
-
-'''
+    x_df, y_df = shuffle_dataset(x_df, y_df)        
+    
+    return x_df, y_df
