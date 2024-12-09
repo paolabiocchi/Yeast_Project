@@ -229,7 +229,6 @@ def has_nan(df):
     else:
         print("The DataFrame does not contain any NaN values.")
 
-----------------------------------------------------------------------------------
 import numpy as np
 import pandas as pd
 
@@ -291,9 +290,6 @@ def y_reverse(y_pred):
         raise ValueError("Invalid method. Choose 'min-max' or 'standardization'.")
     
     return y_original
----------------------------------------------------------------------------------------------------------
-
-
 
 
 def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
