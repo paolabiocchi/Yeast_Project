@@ -300,10 +300,13 @@ def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
 
     x_df = scale_last_columns(x_df)
     has_nan(x_df)
+    print("1")
     x_df = remove_low_variance_features_last_columns(x_df)
     has_nan(x_df)
+    print("2")
     x_df = apply_pca_last_columns(x_df)
     has_nan(x_df)
+    print("3")
 
     x_df, y_df = shuffle_dataset(x_df, y_df)  
 
