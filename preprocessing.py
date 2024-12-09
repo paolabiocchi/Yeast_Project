@@ -71,7 +71,7 @@ def scale_last_columns(data, num_last_columns=7000):
     data.iloc[:, -num_last_columns:] = scaled_cnv
 
     # Plot after scaling
-    plot_histograms(data.iloc[:, -num_last_columns:], title="After Scaling CNVs")
+    #plot_histograms(data.iloc[:, -num_last_columns:], title="After Scaling CNVs")
     
     
     return data
@@ -229,8 +229,74 @@ def has_nan(df):
     else:
         print("The DataFrame does not contain any NaN values.")
 
+----------------------------------------------------------------------------------
+import numpy as np
+import pandas as pd
 
-def preprocessed_data (x_df, y_df) :
+# Variables to store scaling parameters
+scaling_params = {}
+
+def y_preprocessing(y_df, method="min-max"):
+    """
+    Preprocesses the y values based on the selected method: "min-max" or "standardization".
+    Parameters:
+    - y_df: Pandas DataFrame or Series containing the target values.
+    - method: Scaling method, either "min-max" or "standardization".
+
+    Returns:
+    - Preprocessed y as a NumPy array.
+    """
+    global scaling_params
+    y_array = y_df.values if isinstance(y_df, (pd.Series, pd.DataFrame)) else np.array(y_df)
+    
+    if method == "min-max":
+        min_val = np.min(y_array)
+        max_val = np.max(y_array)
+        scaling_params["min"] = min_val
+        scaling_params["max"] = max_val
+        y_scaled = (y_array - min_val) / (max_val - min_val)
+    elif method == "standardization":
+        mean = np.mean(y_array)
+        std = np.std(y_array)
+        scaling_params["mean"] = mean
+        scaling_params["std"] = std
+        y_scaled = (y_array - mean) / std
+    else:
+        raise ValueError("Invalid method. Choose 'min-max' or 'standardization'.")
+    
+    scaling_params["method"] = method
+    return y_scaled
+
+def y_reverse(y_pred):
+    """
+    Reverses the preprocessing on the predicted y values.
+    Parameters:
+    - y_pred: Preprocessed y values as a NumPy array.
+
+    Returns:
+    - Original y values as a NumPy array.
+    """
+    global scaling_params
+    method = scaling_params.get("method")
+    
+    if method == "min-max":
+        min_val = scaling_params["min"]
+        max_val = scaling_params["max"]
+        y_original = y_pred * (max_val - min_val) + min_val
+    elif method == "standardization":
+        mean = scaling_params["mean"]
+        std = scaling_params["std"]
+        y_original = y_pred * std + mean
+    else:
+        raise ValueError("Invalid method. Choose 'min-max' or 'standardization'.")
+    
+    return y_original
+---------------------------------------------------------------------------------------------------------
+
+
+
+
+def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
 
     x_df = scale_last_columns(x_df)
     has_nan(x_df)
@@ -239,6 +305,11 @@ def preprocessed_data (x_df, y_df) :
     x_df = apply_pca_last_columns(x_df)
     has_nan(x_df)
 
-    x_df, y_df = shuffle_dataset(x_df, y_df)        
+    x_df, y_df = shuffle_dataset(x_df, y_df)  
+
+    if y==True :
+        y_df = y_preprocessing(y_df, method=method_chosen)      
     
     return x_df, y_df
+
+
