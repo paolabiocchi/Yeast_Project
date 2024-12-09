@@ -169,3 +169,18 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 201601  YKR036C_482_T->A    0.045564
 41762   YDL045C_294_V->I    0.045180
 341950            PCA_50    0.042305
+
+LASSO with our preprocessing : 
+Mean Squared Error (MSE): 0.069916
+R² Score: 0.052470
+
+YIL047C_763_V->L     0.036021
+YCL014W_1035_K->E    0.030784
+YIL063C_8_N->D       0.030523
+YDL124W_96_V->M      0.018492
+YLR205C_5_S->N       0.018351
+YBL047C_893_D->E     0.017690
+YJR061W_331_I->T     0.015585
+YJL078C_551_T->A     0.015180
+YDR038C_1038_I->V    0.013083
+YNL134C_168_K->E     0.011241
