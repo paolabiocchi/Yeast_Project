@@ -66,12 +66,3 @@ def plot_feature_frequencies(summary_df):
     plt.title('Top Recurrent Features Across Models and Methods')
     plt.gca().invert_yaxis()
     plt.show()
-
-
-
-# Exemple d'utilisation
-save_feature_importance(features, importance_scores, method, model)
-summary = compare_feature_importances("results/*.csv", top_n=20)
-summary.to_csv("feature_comparison_summary.csv", index=False)
-print(summary.head())
-plot_feature_frequencies(summary)
