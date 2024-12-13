@@ -13,15 +13,16 @@ The project is organized as follows:
     ├── genesMatrix_CopyNumber.csv              # Contains all the copy number variations for all yeasts, as a table
     ├── mutations_dataset.csv                   # Contains all the mutations for all yeasts, as a list
     ├── phenotype_dataset.csv                   # Contains all the phenotypes for all yeasts, for easir label??
-    ├── X_matrix_[phenotype].csv                       # Contains all the specific mutations and copy number variations for all yeasts
-    ├── y_[phenotype].csv                 # Contains the phenotype of inteeest for all yeasts
+    ├── X_matrix_[phenotype].csv                # Contains all the specific mutations and copy number variations for all yeasts
+    ├── y_[phenotype].csv                       # Contains the phenotype of inteeest for all yeasts
 ├── results/                        # Contains results files
     ├── plots/                      # Contains all plots (CNV per protein, mutation per protein, mutation per yeast)
     ├── ...                         # File containing all Shap results  
-├── model_[model].ipynb                # All models
-├── extract_data_[./2].ipynb           # To extract X_matrix and y_[phenotype]
+├── model_[model].ipynb             # All models
+├── extract_data_[./2].ipynb        # To extract X_matrix and y_[phenotype]
 ├── preprocessing.py                # To preprocess the data
-├── save_and_compare_results.py        # To save and compare results
+├── analyse.txt                     # To save and compare model results
+├── save_and_compare_results.py     # To save and compare model and Shap results
 ├── README.md                   # Project documentation  
 ├── run.ipynb                   # To make all process of learning and predicting  
 
@@ -78,10 +79,10 @@ We calculate with every model the loss (MSE), the R2 score (good for understandi
 You must choose the model you want to try on the dataset, and run every cell until obtaining results that are immediately stored.
 For the 3rd step : "initialization of the parameters for model training", you can choose the cell to run according to the model that you would like to use for making your predictions.
 
-1. Extracting data :   
+1. Extracting data:   
 All original data are in the `data/` repository. You must choose the phenotype you are interested in (e.g. `YPD_doublingtime`). To extract the X_matrix_[phenotype] and y_[phenotype], you must run all the cells in the `extract_data_ipynb.ipynb`. You will finally get phenotype_dataset, copy_number_variation_dataset, mutations_dataset, extended_mutations_[phenotype], X_matrix_[phenotype], and y_[phenotype], as well as some plots to describe the datasets, which can be found in `results/plots/` repository.
 
-2. (Optional) Preprocessing data : 
+2. (Optional) Preprocessing data: 
 Before training a model, data must be preprocessed. This includes:   
 •	Normalization of data using `scale_last_columns()`.
 •	Removing Correlated Features with `remove_low_variance_features_last_columns()`.
@@ -91,11 +92,11 @@ Before training a model, data must be preprocessed. This includes:
 
 All the preprocessing is done by calling the function `preprocessed_data()`, found in the file `preprocessing.py`, called at the begining of many `model_[model].ipynb` files.
 
-3. Training Models :    
+3. Training Models:    
 All `model_[model].ipynb` models can be run. They all use cross-validation to find the best parameters to find the most accurate model. Some use hyper-parametrization.
 
 4. Results:  
-After training, you can save your model and Shap results in the `results/`repository using `save_and_compare_results()` function found in the file of the same name. You can also make different graphes using `matplotlin.pyplot`.  
+After training, you can save your model and Shap results in the `results/`repository using `save_and_compare_results()` function found in the file of the same name. You can also make different graphes using `matplotlin.pyplot`. You can also write your top 10 features in the `analyse.txt` file.
 
 ## Possible improvements  
 • Implement other classification models such as SVM or Random Forest.  
