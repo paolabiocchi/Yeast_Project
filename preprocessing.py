@@ -99,7 +99,7 @@ def remove_low_variance_features_last_columns(data, num_last_columns=6051, thres
     # Get the selected column indices
     selected_columns = target_columns.columns[selector.get_support()]
     
-    new_num_last_columns = len(reduced_data)
+    new_num_last_columns = len(reduced_data) - 1
 
     # Replace the last N columns with the reduced set
     data = data.drop(columns=target_columns.columns)  # Drop the original last N columns
