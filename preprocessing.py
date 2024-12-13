@@ -104,7 +104,7 @@ def remove_low_variance_features_last_columns(data, num_last_columns=6051, thres
     # Replace the last N columns with the reduced set
     data = data.drop(columns=target_columns.columns)  # Drop the original last N columns
     data = pd.concat([data, pd.DataFrame(reduced_data, columns=selected_columns)], axis=1)
-    print(data.columns[-1], data.columns[-new_num_last_columns])
+    print(data.columns[-(new_num_last_columns+1)], data.columns[-new_num_last_columns])
     """
     # Plot variance after filtering
     reduced_variances = pd.DataFrame(reduced_data).var(axis=0)
