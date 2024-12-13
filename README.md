@@ -19,9 +19,9 @@ The project is organized as follows:
 ├── results/                        # Contains results files
 │ ├── plots/                        # Contains all plots (CNV per protein, mutation per protein, mutation per yeast)
 │ ├── ...                           # File containing all Shap results  
-├── model_[model].ipynb             # All models
 ├── extract_data_[./2].ipynb        # To extract X_matrix and y_[phenotype]
 ├── preprocessing.py                # To preprocess the data
+├── model_[model].ipynb             # All models
 ├── analyse.txt                     # To save and compare model results
 ├── save_and_compare_results.py     # To save and compare model and Shap results
 ├── README.md                       # Project documentation  
