@@ -49,7 +49,7 @@ def visualize_pca_variance(pca, title):
     plt.grid()
     plt.show()
 
-def scale_last_columns(data, num_last_columns=7000):
+def scale_last_columns(data, num_last_columns=6051):
     """
     Scales the last N columns (assumed to be CNVs) to a range of 0 to 1.
     
@@ -77,7 +77,7 @@ def scale_last_columns(data, num_last_columns=7000):
     return data
 
 
-def remove_low_variance_features_last_columns(data, num_last_columns=7000, threshold=0.05):
+def remove_low_variance_features_last_columns(data, num_last_columns=6051, threshold=0.05):
     """
     Removes features with variance below a specified threshold in the last N columns.
     This has been done already for mutations during our extraction of data, so it is only useful to do it for the copy number variation columns.
@@ -118,7 +118,7 @@ def remove_low_variance_features_last_columns(data, num_last_columns=7000, thres
     return data
 
 
-def apply_pca_last_columns(data, num_last_columns=7000, n_components=0.95, normalize=True):
+def apply_pca_last_columns(data, num_last_columns=6051, n_components=0.95, normalize=True):
     """
     Applies PCA to reduce dimensionality of the last N columns of the dataset.
     
