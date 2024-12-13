@@ -6,18 +6,18 @@ The primary objective of this project is to apply machine learning algorithms to
 ## **Project Structure**
 The project is organized as follows:  
 ├── data/                       # Contains data files
-    │ ├── Proteome_1011/          # Contains all the fasta files corresponding to all yeasts' genotypes of each protein
-    │ ├── copy_number_variation_dataset.csv       # Contains all the copy number variations for all yeasts
-    │ ├── extended_mutations_[phenotype].csv             # Contains all the specific mutations for all yeasts
-    │ ├── Finalset_223phenotypes_1011.tab         # Contains all the phenotypes for all yeasts
-    │ ├── genesMatrix_CopyNumber.csv              # Contains all the copy number variations for all yeasts, as a table
-    │ ├── mutations_dataset.csv                   # Contains all the mutations for all yeasts, as a list
-    │ ├── phenotype_dataset.csv                   # Contains all the phenotypes for all yeasts, for easir label??
-    │ ├── X_matrix_[phenotype].csv                # Contains all the specific mutations and copy number variations for all yeasts
-    │ ├── y_[phenotype].csv                       # Contains the phenotype of inteeest for all yeasts
+│ ├── Proteome_1011/          # Contains all the fasta files corresponding to all yeasts' genotypes of each protein
+│ ├── copy_number_variation_dataset.csv       # Contains all the copy number variations for all yeasts
+│ ├── extended_mutations_[phenotype].csv             # Contains all the specific mutations for all yeasts
+│ ├── Finalset_223phenotypes_1011.tab         # Contains all the phenotypes for all yeasts
+│ ├── genesMatrix_CopyNumber.csv              # Contains all the copy number variations for all yeasts, as a table
+│ ├── mutations_dataset.csv                   # Contains all the mutations for all yeasts, as a list
+│ ├── phenotype_dataset.csv                   # Contains all the phenotypes for all yeasts, for easir label??
+│ ├── X_matrix_[phenotype].csv                # Contains all the specific mutations and copy number variations for all yeasts
+│ ├── y_[phenotype].csv                       # Contains the phenotype of interest for all yeasts
 ├── results/                        # Contains results files
-    │ ├── plots/                      # Contains all plots (CNV per protein, mutation per protein, mutation per yeast)
-    │ ├── ...                         # File containing all Shap results  
+│ ├── plots/                      # Contains all plots (CNV per protein, mutation per protein, mutation per yeast)
+│ ├── ...                         # File containing all Shap results  
 ├── model_[model].ipynb             # All models
 ├── extract_data_[./2].ipynb        # To extract X_matrix and y_[phenotype]
 ├── preprocessing.py                # To preprocess the data
