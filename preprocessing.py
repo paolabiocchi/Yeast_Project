@@ -73,7 +73,7 @@ def scale_last_columns(data, num_last_columns=6051):
     # Plot after scaling
     #plot_histograms(data.iloc[:, -num_last_columns:], title="After Scaling CNVs")
     
-    
+    print(data.shape())
     return data
 
 
@@ -100,10 +100,12 @@ def remove_low_variance_features_last_columns(data, num_last_columns=6051, thres
     # Get the selected column indices
     selected_columns = target_columns.columns[selector.get_support()]
     
+    new_num_last_columns = len(reduced_data)
+
     # Replace the last N columns with the reduced set
     data = data.drop(columns=target_columns.columns)  # Drop the original last N columns
     data = pd.concat([data, pd.DataFrame(reduced_data, columns=selected_columns)], axis=1)
-    
+    print(data.columns[-new_num_last_columns])
     """
     # Plot variance after filtering
     reduced_variances = pd.DataFrame(reduced_data).var(axis=0)
@@ -115,10 +117,10 @@ def remove_low_variance_features_last_columns(data, num_last_columns=6051, thres
     plt.show()
     """
 
-    return data
+    return data, new_num_last_columns
 
 
-def apply_pca_last_columns(data, num_last_columns=6051, n_components=0.95, normalize=True):
+def apply_pca_last_columns(data, num_last_columns, n_components=0.95, normalize=True):
     """
     Applies PCA to reduce dimensionality of the last N columns of the dataset.
     
@@ -297,10 +299,12 @@ def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
     x_df = scale_last_columns(x_df)
     has_nan(x_df)
     print("1")
-    x_df = remove_low_variance_features_last_columns(x_df)
+    
+    x_df, new_num_last_columns = remove_low_variance_features_last_columns(x_df)
     has_nan(x_df)
     print("2")
-    x_df = apply_pca_last_columns(x_df)
+
+    x_df = apply_pca_last_columns(x_df, num_last_columns = new_num_last_columns)
     has_nan(x_df)
     print("3")
 
