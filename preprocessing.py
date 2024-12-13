@@ -73,7 +73,6 @@ def scale_last_columns(data, num_last_columns=6051):
     # Plot after scaling
     #plot_histograms(data.iloc[:, -num_last_columns:], title="After Scaling CNVs")
     
-    print(data.shape())
     return data
 
 
