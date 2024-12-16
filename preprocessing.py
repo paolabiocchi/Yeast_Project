@@ -295,23 +295,24 @@ def y_reverse(y_pred):
 
 def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
 
-    x_df = scale_last_columns(x_df)
-    has_nan(x_df)
+    x_df_scaled = scale_last_columns(x_df)
+    has_nan(x_df_scaled)
     print("1")
     
-    x_df, new_num_last_columns = remove_low_variance_features_last_columns(x_df)
-    has_nan(x_df)
+    x_df_variance, new_num_last_columns = remove_low_variance_features_last_columns(x_df_scaled)
+    has_nan(x_df_variance)
     print("2")
 
-    x_df = apply_pca_last_columns(x_df, num_last_columns = new_num_last_columns)
-    has_nan(x_df)
+    x_df_pca = apply_pca_last_columns(x_df_variance, num_last_columns = new_num_last_columns)
+    has_nan(x_df_pca)
     print("3")
 
-    x_df, y_df = shuffle_dataset(x_df, y_df)  
+    x_df_shuffled, y_df_shuffled = shuffle_dataset(x_df_pca, y_df)  
 
     if y==True :
-        y_df = y_preprocessing(y_df, method=method_chosen)      
-    
-    return x_df, y_df
+        y_df_preprocessed = y_preprocessing(y_df_shuffled, method=method_chosen)      
+        return x_df_shuffled, y_df_preprocessed
+
+    return x_df_shuffled, y_df_shuffled
 
 
