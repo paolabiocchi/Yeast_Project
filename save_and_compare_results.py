@@ -22,7 +22,7 @@ def save_feature_importance(features, importance_scores, method, model_name):
     df['Rank'] = range(1, len(df) + 1)
     
     # Sauvegarder dans un fichier CSV
-    output_path = f"results/{model_name}_{method}_importance.csv"
+    output_path = f"../results/{model_name}_{method}_importance.csv"
     df.to_csv(output_path, index=False)
     print(f"Feature importance saved to {output_path}")
 
