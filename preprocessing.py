@@ -298,7 +298,6 @@ def y_reverse(y_pred):
 def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
 
     x_df_scaled = scale_last_columns(x_df)
-    print(x_df_scaled.size())
     has_nan(x_df_scaled)
     print("1")
     
