@@ -16,16 +16,22 @@ The project is organized as follows:
 │ ├── phenotype_dataset.csv                   # Contains all the phenotypes for all yeasts, for easir label??
 │ ├── X_matrix_[phenotype].csv                # Contains all the specific mutations and copy number variations for all yeasts
 │ ├── y_[phenotype].csv             # Contains the phenotype of interest for all yeasts
+├── extract_data/                                       # To extract data of our interest
+│ ├── extract_data_mutations.ipynb                      # To extract the matrix of mutations and y_[phenotype]
+│ ├── extract_data_proteins.ipynb                       # To extract the matrix of proteins mutated
+│ ├── extract_mutations_from_important_proteins.ipynb   # To extract the matrix of mutations from the important proteins
+│ ├── extract_proteins_results.ipynb                    # To extract the results of models run on the matrix of proteins mutated
+├── models/                         # All models
 ├── results/                        # Contains results files
 │ ├── plots/                        # Contains all plots (CNV per protein, mutation per protein, mutation per yeast)
-│ ├── ...                           # File containing all Shap results  
-├── extract_data_[./2].ipynb        # To extract X_matrix and y_[phenotype]
-├── preprocessing.py                # To preprocess the data
-├── model_[model].ipynb             # All models
+│ ├── ...                           # Files containing all model and Shap results  
 ├── analyse.txt                     # To save and compare model results
-├── save_and_compare_results.py     # To save and compare model and Shap results
+├── preprocessing.py                # To preprocess the data
 ├── README.md                       # Project documentation  
+├── requirements.txt                # For all external libraries used
 ├── run.ipynb                       # To make all process of learning and predicting  
+├── save_and_compare_results.py     # To save and compare model and Shap results
+
 ```
 ## **Installation and Dependencies**
 ##### Prerequisites
