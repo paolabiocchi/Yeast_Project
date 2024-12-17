@@ -1,16 +1,7 @@
 import pandas as pd
 import numpy as np
-import re
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error
 from sklearn.decomposition import PCA
-from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy.sparse import csr_matrix
 from sklearn.feature_selection import VarianceThreshold
-from sklearn.decomposition import TruncatedSVD
-import dask.dataframe as dd
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -19,6 +10,12 @@ import seaborn as sns
 def plot_histograms(data, title, bins=50, figsize=(12, 6)):
     """
     Plot histograms of all numerical columns in the DataFrame.
+
+    Parameters:
+    data (pandas.DataFrame): The DataFrame containing numerical columns to plot.
+    title (str): The title for the plot.
+    bins (int, optional): The number of bins to use in the histograms. Default is 50.
+    figsize (tuple, optional): The size of the plot (width, height). Default is (12, 6).
     """
     plt.figure(figsize=figsize)
     data.hist(bins=bins, figsize=figsize)
@@ -29,6 +26,11 @@ def plot_histograms(data, title, bins=50, figsize=(12, 6)):
 def plot_correlation_matrix(data, title, figsize=(10, 8)):
     """
     Plot a heatmap of the correlation matrix.
+
+    Parameters:
+    data (pandas.DataFrame): The DataFrame for which to compute the correlation matrix.
+    title (str): The title for the heatmap.
+    figsize (tuple, optional): The size of the plot (width, height). Default is (10, 8).
     """
     corr_matrix = data.corr()
     plt.figure(figsize=figsize)
@@ -39,6 +41,10 @@ def plot_correlation_matrix(data, title, figsize=(10, 8)):
 def visualize_pca_variance(pca, title):
     """
     Plot the explained variance ratio of PCA components.
+
+    Parameters:
+    pca (PCA object): The PCA model, which contains the explained variance ratio.
+    title (str): The title for the plot.
     """
     explained_variance = np.cumsum(pca.explained_variance_ratio_)
     plt.figure(figsize=(10, 6))
@@ -54,11 +60,11 @@ def scale_last_columns(data, num_last_columns=6051):
     Scales the last N columns (assumed to be CNVs) to a range of 0 to 1.
     
     Parameters:
-        data (pd.DataFrame): x_train data
-        num_last_columns (int): Number of copy number variation columns from the end to scale .
+        data (pd.DataFrame): The input DataFrame.
+        num_last_columns (int): The number of copy number variation (CNV) columns from the end of the DataFrame to scale. Default is 6051.
 
     Returns:
-        pd.DataFrame: Data with the last columns scaled.
+        pd.DataFrame: DataFrame with the last N CNV columns scaled to the range [0, 1].
     """
     # Select the last N columns
     cnv_columns = data.iloc[:, -num_last_columns:]
@@ -70,26 +76,25 @@ def scale_last_columns(data, num_last_columns=6051):
     # Replace the last N columns with their scaled values
     data.iloc[:, -num_last_columns:] = scaled_cnv
 
-    # Plot after scaling
-    #plot_histograms(data.iloc[:, -num_last_columns:], title="After Scaling CNVs")
-    
     return data
 
 
 def remove_low_variance_features_last_columns(data, num_last_columns=6051, threshold=0.05):
     """
     Removes features with variance below a specified threshold in the last N columns.
-    This has been done already for mutations during our extraction of data, so it is only useful to do it for the copy number variation columns.
+    This has been done already for mutations during our extraction of data, 
+    so it is only useful to do it for the copy number variation columns.
     
     Parameters:
         data (pd.DataFrame): Input data.
-        num_last_columns (int): Number of columns from the end to apply variance filtering.
-        threshold (float): Minimum variance a feature must have to be retained.
+        num_last_columns (int): Number of CNV columns from the end to apply variance filtering. Default is 6051.
+        threshold (float): Minimum variance a feature must have to be retained. Default is 0.05.
 
     Returns:
-        pd.DataFrame: Data with low-variance features removed in the last N columns.
+        pd.DataFrame: Data with low-variance features removed from the last N columns.
+        int: The number of columns of CNV remaining after filtering.
     """
-    # Select the last N columns
+    # Select the CNV columns
     target_columns = data.iloc[:, -num_last_columns:]
     
     # Apply VarianceThreshold to these columns
@@ -98,25 +103,15 @@ def remove_low_variance_features_last_columns(data, num_last_columns=6051, thres
     
     # Get the selected column indices
     selected_columns = target_columns.columns[selector.get_support()]
-    
+
+    # Get the new number of CNV columns after removing low-variance features
     new_num_last_columns = reduced_data.shape[1]
 
     # Create a DataFrame with the reduced columns
     reduced_df = pd.DataFrame(reduced_data, columns=selected_columns, index=data.index)
     
-    # Replace the last N columns with the reduced set
+    # Concatenate the remaining columns (before the selected CNV columns) with the reduced CNV columns
     data = pd.concat([data.iloc[:, :-num_last_columns], reduced_df], axis=1)
-    
-    """
-    # Plot variance after filtering
-    reduced_variances = pd.DataFrame(reduced_data).var(axis=0)
-    plt.figure(figsize=(12, 6))
-    plt.hist(reduced_variances, bins=50, color="orange")
-    plt.title("Variance of Last Columns (After Filtering)")
-    plt.xlabel("Variance")
-    plt.ylabel("Frequency")
-    plt.show()
-    """
 
     return data, new_num_last_columns
 
@@ -127,23 +122,20 @@ def apply_pca_last_columns(data, num_last_columns, n_components=0.95, normalize=
     
     Parameters:
         data (pd.DataFrame): Input data.
-        num_last_columns (int): Number of columns from the end to apply PCA.
-        n_components (float or int): Number of components to keep or the amount of variance to retain.
+        num_last_columns (int): Number of CNV columns from the end to apply PCA.
+        n_components (float or int): Number of components to keep or the amount of variance to retain. Default is 0.95.
+        normalize (bool): Whether to normalize the PCA-transformed data. Default is True.
 
     Returns:
-        pd.DataFrame: Data with PCA applied to the last N columns.
+        pd.DataFrame: Data with PCA applied to the CNV columns, and the rest of the dataset unchanged.
     """
-    # Separate the last N columns and the rest of the dataset
+    # Separate the CNV columns and the rest of the dataset
     other_columns = data.iloc[:, :-num_last_columns]
     target_columns = data.iloc[:, -num_last_columns:]
     
-    # Apply PCA to the last N columns
+    # Apply PCA to the CNV columns
     pca = PCA(n_components=n_components)
     reduced_data = pca.fit_transform(target_columns)
-
-    # Plot explained variance
-    #visualize_pca_variance(pca, title="Explained Variance by PCA Components")
-
     
     # Normalize the PCA-transformed features if specified
     if normalize:
@@ -212,7 +204,7 @@ def shuffle_dataset(data, labels):
         labels (pd.DataFrame): Labels dataset.
 
     Returns:
-        Tuple: Shuffled features and labels.
+        Tuple: Shuffled features and labels as separate DataFrames.
     """
     combined = pd.concat([data, labels], axis=1)
     shuffled = combined.sample(frac=1, random_state=42).reset_index(drop=True)
@@ -224,29 +216,19 @@ def shuffle_dataset(data, labels):
     return shuffled_data, shuffled_labels
 
 
-def has_nan(df):
-    has_nan = df.isnull().values.any()
-
-    if has_nan:
-        print("The DataFrame contains NaN values.")
-    else:
-        print("The DataFrame does not contain any NaN values.")
-
-import numpy as np
-import pandas as pd
-
 # Variables to store scaling parameters
 scaling_params = {}
 
 def y_preprocessing(y_df, method="min-max"):
     """
     Preprocesses the y values based on the selected method: "min-max" or "standardization".
+    
     Parameters:
     - y_df: Pandas DataFrame or Series containing the target values.
     - method: Scaling method, either "min-max" or "standardization".
 
     Returns:
-    - Preprocessed y as a NumPy array.
+    - Preprocessed y values as a NumPy array.
     """
     global scaling_params
     y_array = y_df.values if isinstance(y_df, (pd.Series, pd.DataFrame)) else np.array(y_df)
@@ -257,12 +239,14 @@ def y_preprocessing(y_df, method="min-max"):
         scaling_params["min"] = min_val
         scaling_params["max"] = max_val
         y_scaled = (y_array - min_val) / (max_val - min_val)
+
     elif method == "standardization":
         mean = np.mean(y_array)
         std = np.std(y_array)
         scaling_params["mean"] = mean
         scaling_params["std"] = std
         y_scaled = (y_array - mean) / std
+
     else:
         raise ValueError("Invalid method. Choose 'min-max' or 'standardization'.")
     
@@ -272,11 +256,12 @@ def y_preprocessing(y_df, method="min-max"):
 def y_reverse(y_pred):
     """
     Reverses the preprocessing on the predicted y values.
+    
     Parameters:
-    - y_pred: Preprocessed y values as a NumPy array.
+    - y_pred: Preprocessed y values as a NumPy array (predictions made on scaled data).
 
     Returns:
-    - Original y values as a NumPy array.
+    - Original y values as a NumPy array (restores the original scale).
     """
     global scaling_params
     method = scaling_params.get("method")
@@ -296,18 +281,24 @@ def y_reverse(y_pred):
 
 
 def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
+    """
+    Preprocess the input data by scaling, removing low-variance features, applying PCA, and shuffling the dataset.
+    
+    Parameters:
+    - x_df: Pandas DataFrame containing the feature data.
+    - y_df: Pandas DataFrame containing the target labels.
+    - y: Boolean flag to indicate if the target data should be preprocessed (default is False).
+    - method_chosen: Scaling method for preprocessing the target data, either "min-max" or "standardization" (default is "min-max").
 
+    Returns:
+    - x_df_shuffled: Shuffled feature data after preprocessing.
+    - y_df_shuffled or y_df_preprocessed: Shuffled target data (or preprocessed target data if y=True).
+    """
     x_df_scaled = scale_last_columns(x_df)
-    has_nan(x_df_scaled)
-    print("1")
     
     x_df_variance, new_num_last_columns = remove_low_variance_features_last_columns(x_df_scaled)
-    has_nan(x_df_variance)
-    print("2")
 
     x_df_pca = apply_pca_last_columns(x_df_variance, num_last_columns = new_num_last_columns)
-    has_nan(x_df_pca)
-    print("3")
 
     x_df_shuffled, y_df_shuffled = shuffle_dataset(x_df_pca, y_df)  
 
@@ -316,5 +307,3 @@ def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
         return x_df_shuffled, y_df_preprocessed
 
     return x_df_shuffled, y_df_shuffled
-
-
