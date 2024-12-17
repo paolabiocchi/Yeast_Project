@@ -1,7 +1,7 @@
 # **Machine Learning Project - Yeasts' genotype to describe their doubling time**
 
 ## **Description**
-The primary objective of this project is to apply machine learning algorithms to identify the mutations in the protein sequences and copy number variations (CNVs) of each protein sequences, of each yeast genotype that have the most significant effects on their doubling time. To achieve this, we build and evaluate models that predict the yeast doubling time based on their genotype. Multiple models, including BERT, ElasticNet, GBM, LASSO, LightGBM, Neural Networks, Random Forest, XGBoost, SVM, were tested and optimized through cross-validation. This process aimed to minimize classification errors and identify the model that best highlights the most impactful mutations and copy number variations, thus providing valuable insights into yeast biology.
+The primary objective of this project is to apply machine learning algorithms to identify the mutations in the protein sequences and copy number variations (CNVs) of each protein sequences, of each yeast genotype that have the most significant effects on their doubling time. To achieve this, we build and evaluate models that predict the yeast doubling time based on their genotype. Multiple models, including ElasticNet, GBM, LASSO, LightGBM, Neural Networks, Random Forest, XGBoost, SVM, were tested and optimized through cross-validation. This process aimed to minimize classification errors and identify the model that best highlights the most impactful mutations and copy number variations, thus providing valuable insights into yeast biology.
 
 ## **Project Structure**
 The project is organized as follows:  
@@ -68,7 +68,6 @@ These preprocessing steps collectively decrease dimension, to facilitate model a
 
 ##### ML Model Implementation:
 Various machine learning algorithms were implemented and trained on the dataset.    
-•	BERT
 •   ElasticNet
 •   GBM
 •   LASSO
