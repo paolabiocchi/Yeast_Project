@@ -6,6 +6,9 @@ from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# ============================================================
+# SECTION 1: PLOTTING
+# ============================================================
 
 def plot_histograms(data, title, bins=50, figsize=(12, 6)):
     """
@@ -55,6 +58,10 @@ def visualize_pca_variance(pca, title):
     plt.grid()
     plt.show()
 
+# ============================================================
+# SECTION 2: PREPROCESSING
+# ============================================================
+
 def scale_last_columns(data, num_last_columns=6051):
     """
     Scales the last N columns (assumed to be CNVs) to a range of 0 to 1.
@@ -77,7 +84,6 @@ def scale_last_columns(data, num_last_columns=6051):
     data.iloc[:, -num_last_columns:] = scaled_cnv
 
     return data
-
 
 def remove_low_variance_features_last_columns(data, num_last_columns=6051, threshold=0.05):
     """
@@ -150,50 +156,6 @@ def apply_pca_last_columns(data, num_last_columns, n_components=0.95, normalize=
     result = pd.concat([other_columns, reduced_df], axis=1)
     
     return result
-
-
-def metrics(x_train, x_train_preprocessed):
-    """
-    Compute and display various metrics for the original and preprocessed data.
-    
-    Parameters:
-        x_train (pd.DataFrame): Original data.
-        x_train_preprocessed (pd.DataFrame): Preprocessed data.
-    """
-    # Compute and print dimensions
-    print("Dimensions of the DataFrame (original):", x_train.shape)
-    print("Dimensions of the DataFrame (after preprocessing):", x_train_preprocessed.shape)
-
-    # Exclude the first row and column for calculations
-    x_cut = x_train.iloc[1:, 1:]
-    x_cut_p = x_train_preprocessed.iloc[1:, 1:]
-
-    # Compute and print mean
-    mean_value_x_train = x_cut.values.mean()
-    mean_value_x_train_preprocessed = x_cut_p.values.mean()
-    print("\nMean of all values (original):", mean_value_x_train)
-    print("Mean of all values (after preprocessing):", mean_value_x_train_preprocessed)
-
-    # Compute and print max and min
-    max_value_x_train = np.max(x_cut.values)
-    min_value_x_train = np.min(x_cut.values)
-    max_value_x_train_preprocessed = np.max(x_cut_p.values)
-    min_value_x_train_preprocessed = np.min(x_cut_p.values)
-    print("\nMax value (original):", max_value_x_train, "Min value (original):", min_value_x_train)
-    print("Max value (after preprocessing):", max_value_x_train_preprocessed, "Min value (after preprocessing):", min_value_x_train_preprocessed)
-
-    # Compute and print standard deviation
-    std_x_train = x_cut.values.std()
-    std_x_train_preprocessed = x_cut_p.values.std()
-    print("\nStandard deviation (original):", std_x_train)
-    print("Standard deviation (after preprocessing):", std_x_train_preprocessed)
-
-    # Compute and print variance
-    var_x_train = x_cut.values.var()
-    var_x_train_preprocessed = x_cut_p.values.var()
-    print("\nVariance (original):", var_x_train)
-    print("Variance (after preprocessing):", var_x_train_preprocessed)
-
 
 def shuffle_dataset(data, labels):
     """
@@ -279,7 +241,6 @@ def y_reverse(y_pred):
     
     return y_original
 
-
 def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
     """
     Preprocess the input data by scaling, removing low-variance features, applying PCA, and shuffling the dataset.
@@ -307,3 +268,49 @@ def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
         return x_df_shuffled, y_df_preprocessed
 
     return x_df_shuffled, y_df_shuffled
+
+# ============================================================
+# SECTION 3: METRICS
+# ============================================================
+
+def metrics(x_train, x_train_preprocessed):
+    """
+    Compute and display various metrics for the original and preprocessed data.
+    
+    Parameters:
+        x_train (pd.DataFrame): Original data.
+        x_train_preprocessed (pd.DataFrame): Preprocessed data.
+    """
+    # Compute and print dimensions
+    print("Dimensions of the DataFrame (original):", x_train.shape)
+    print("Dimensions of the DataFrame (after preprocessing):", x_train_preprocessed.shape)
+
+    # Exclude the first row and column for calculations
+    x_cut = x_train.iloc[1:, 1:]
+    x_cut_p = x_train_preprocessed.iloc[1:, 1:]
+
+    # Compute and print mean
+    mean_value_x_train = x_cut.values.mean()
+    mean_value_x_train_preprocessed = x_cut_p.values.mean()
+    print("\nMean of all values (original):", mean_value_x_train)
+    print("Mean of all values (after preprocessing):", mean_value_x_train_preprocessed)
+
+    # Compute and print max and min
+    max_value_x_train = np.max(x_cut.values)
+    min_value_x_train = np.min(x_cut.values)
+    max_value_x_train_preprocessed = np.max(x_cut_p.values)
+    min_value_x_train_preprocessed = np.min(x_cut_p.values)
+    print("\nMax value (original):", max_value_x_train, "Min value (original):", min_value_x_train)
+    print("Max value (after preprocessing):", max_value_x_train_preprocessed, "Min value (after preprocessing):", min_value_x_train_preprocessed)
+
+    # Compute and print standard deviation
+    std_x_train = x_cut.values.std()
+    std_x_train_preprocessed = x_cut_p.values.std()
+    print("\nStandard deviation (original):", std_x_train)
+    print("Standard deviation (after preprocessing):", std_x_train_preprocessed)
+
+    # Compute and print variance
+    var_x_train = x_cut.values.var()
+    var_x_train_preprocessed = x_cut_p.values.var()
+    print("\nVariance (original):", var_x_train)
+    print("Variance (after preprocessing):", var_x_train_preprocessed)
