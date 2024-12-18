@@ -1,9 +1,9 @@
-Random forest, sans preprocessing :
+Random forest, without preprocessing:
 Mean Squared Error: 0.08084533613215243
 R² Score: 0.03084267054745371
-Calcul de l'importance des caractéristiques...
+Calculation of the features importance...
 
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                   Feature  Importance
 198668   YKL218C_169_G->R    0.015733
 226553  YLR320W_1167_E->G    0.013914
@@ -16,27 +16,19 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 5196      YAR033W_59_G->A    0.006528
 166770   YJL045W_560_T->S    0.006041
 
+With such a limited range of YPD_doublingtime, an MSE of 0.0808 can be considered relatively high. This suggests that the model's predictions often deviate significantly from the actual values within this narrow range.
+An R² of 0.0308 indicates that the model explains only 3% of the variance in the data. This means that most of the variation in YPD_doublingtime remains unexplained by the mutations included in the model.
+Mutations and copy number variations alone may not be sufficient to explain YPD_doublingtime. Other biological or environmental factors not included in the data might play a significant role.
+The large number of features (348,522 columns) could lead to overfitting or dilution of important signals.
 
-Avec une plage de YPD_doublingtime aussi limitée, une MSE de 0.0808 peut être considérée comme relativement élevée. Cela indique que les prédictions du modèle s’écartent souvent de manière significative des valeurs réelles dans cette plage étroite.
-Un R² de 0.0308 indique que le modèle explique seulement 3% de la variance dans les données. Cela signifie que la majeure partie des variations dans YPD_doublingtime est encore inexpliquée par les mutations incluses dans le modèle.
-Les mutations et les copy number variations seules ne suffisent peut-être pas pour expliquer YPD_doublingtime. D’autres facteurs biologiques ou environnementaux non inclus dans les données pourraient jouer un rôle important.
-Le grand nombre de features (348,522 colonnes) peut entraîner un sur-apprentissage ou une dilution des signaux importants.
+####
 
-
-    Modèles plus adaptés :
-	•	Tester des modèles capables de mieux capturer les interactions complexes entre mutations, comme :
-	•	Gradient Boosting Machines (e.g., XGBoost, LightGBM).
-	•	Réseaux neuronaux, si vous disposez des ressources nécessaires.
-
-
-
-
-avec XGradient Bossting et K cross validation :
+XGBoost, with K cross validation:
 Mean Squared Error: 0.08534176926831794
 R² Score: -0.02305964885393741
-Calcul de l'importance des caractéristiques...
+Calculation of the features importance...
 
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                   Feature  Importance
 198668   YKL218C_169_G->R    0.015733
 226553  YLR320W_1167_E->G    0.013914
@@ -49,15 +41,14 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 5196      YAR033W_59_G->A    0.006528
 166770   YJL045W_560_T->S    0.006041
 
+####
 
-
-
-Random forest, avec preprocessing de Pao :
+Random forest, with our preprocessing:
 Mean Squared Error: 0.08249086202879267
 R² Score: 0.011116443162784262
-Calcul de l'importance des caractéristiques...
+Calculation of the features importance...
 
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                   Feature  Importance
 198668   YKL218C_169_G->R    0.017795
 226553  YLR320W_1167_E->G    0.016718
@@ -70,13 +61,14 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 199364   YKR003W_411_A->V    0.006849
 5196      YAR033W_59_G->A    0.006528
 
+####
 
-XGBoost, avec preprocessing de Pao :
+XGBoost, with our preprocessing:
 Mean Squared Error: 0.08301932648142406
 R² Score: 0.004781319553605057
-Calcul de l'importance des caractéristiques...
+Calculation of the features importance...
 
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                   Feature  Importance
 198668   YKL218C_169_G->R    0.017795
 226553  YLR320W_1167_E->G    0.016718
@@ -89,14 +81,14 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 199364   YKR003W_411_A->V    0.006849
 5196      YAR033W_59_G->A    0.006528
 
+####
 
-
-Random forest, avec preprocessing de Pao, sans pca :
+Random forest, with our preprocessing, without pca :
 Mean Squared Error: 0.08379476080714418
 R² Score: -0.0045144283056444134
-Calcul de l'importance des caractéristiques...
+Calculation of the features importance...
 
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                   Feature  Importance
 226553  YLR320W_1167_E->G    0.019304
 198668   YKL218C_169_G->R    0.011532
@@ -109,14 +101,15 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 138038  YHL030W_1282_L->W    0.007985
 247803  YMR105W-A_60_I->F    0.006896
 
+####
 
-XGBoost, avec preprocessing de Pao, sans pca:
-Scores de validation croisée (R²): [-0.01860866 -0.00875458  0.05244922 -0.30572404 -0.14285072]
+XGBoost, with our preprocessing, without pca:
+Cross-Validation Scores (R²): [-0.01860866 -0.00875458  0.05244922 -0.30572404 -0.14285072]
 Mean Squared Error: 0.08791647673952753
 R² Score: -0.05392471462396653
-Calcul de l'importance des caractéristiques...
+Calculation of the features importance...
 
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                   Feature  Importance
 226553  YLR320W_1167_E->G    0.019304
 198668   YKL218C_169_G->R    0.011532
@@ -129,17 +122,18 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 138038  YHL030W_1282_L->W    0.007985
 247803  YMR105W-A_60_I->F    0.006896
 
+####
 
-LASSO model avec preprocessing de pao:
+LASSO, with our preprocessing:
 Mean Squared Error (MSE): 0.073898
 R² Score: -0.001491
 
+####
 
-
-GBM with preprocessing like the github :
+GBM, with GitHub preprocessing:
 Mean Squared Error: 1.637230
 R² Score: 0.062717
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                  Feature  Importance
 8629    YBL047C_893_D->E    0.044870
 209742  YLL049W_148_L->V    0.039871
@@ -152,12 +146,12 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 328742  YPL222W_406_L->M    0.013385
 347478           YOR388C    0.013237
 
+####
 
-
-GBM with our preprocessing :
+GBM, with our preprocessing :
 Mean Squared Error: 0.071883
 R² Score: 0.025821
-Mutations ayant le plus d'impact sur le YPD doubling time :
+Mutations with the most impact on YPD doubling time:
                  Feature  Importance
 155095    YIL063C_8_N->D    0.204877
 221409    YLR205C_5_S->N    0.108073
@@ -170,7 +164,9 @@ Mutations ayant le plus d'impact sur le YPD doubling time :
 41762   YDL045C_294_V->I    0.045180
 341950            PCA_50    0.042305
 
-LASSO with our preprocessing : 
+####
+
+LASSO, with our preprocessing : 
 Mean Squared Error (MSE): 0.069916
 R² Score: 0.052470
 

@@ -12,16 +12,13 @@ def save_feature_importance(features, importance_scores, method, model_name):
         method: str, method used (e.g., "SHAP", "Lasso", "LightGBM")
         model_name: str, name of the model
     """
-    # Create a DataFrame with feature names and their corresponding importance scores
     df = pd.DataFrame({
         'Feature_ID': features,
         'Importance/Score': importance_scores
     }).sort_values(by='Importance/Score', ascending=False)
     
-    # Add a 'Rank' column to rank the features by their importance/score
     df['Rank'] = range(1, len(df) + 1)
     
-    # Save the DataFrame to a CSV file
     output_path = f"../results/{model_name}_{method}_importance.csv"
     df.to_csv(output_path, index=False)
     print(f"Feature importance saved to {output_path}")
@@ -37,23 +34,16 @@ def compare_feature_importances(file_pattern, top_n=20):
     Returns:
         DataFrame summarizing feature frequencies
     """
-    # Retrieve all files matching the specified pattern
     files = glob.glob(file_pattern)
     all_features = []
 
-   # Iterate through each file
     for file in files:
-        # Read the CSV file into a DataFrame
         df = pd.read_csv(file)
-        # Get the top_n features from the 'Feature_ID' column
         top_features = df['Feature_ID'].head(top_n).tolist()
-        # Add these top features to the list of all features
         all_features.extend(top_features)
 
-    # Count the occurrences (frequencies) of each feature
     feature_counts = pd.Series(all_features).value_counts()
 
-    # Convert the feature counts to a DataFrame for easier visualization
     summary_df = feature_counts.reset_index()
     summary_df.columns = ['Feature_ID', 'Frequency']
 

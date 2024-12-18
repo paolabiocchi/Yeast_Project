@@ -252,8 +252,8 @@ def preprocessed_data (x_df, y_df, y=False, method_chosen="min-max") :
     - method_chosen: Scaling method for preprocessing the target data, either "min-max" or "standardization" (default is "min-max").
 
     Returns:
-    - x_df_shuffled: Shuffled feature data after preprocessing.
-    - y_df_shuffled or y_df_preprocessed: Shuffled target data (or preprocessed target data if y=True).
+    - x_df_shuffled: Preprocessed feature data.
+    - y_df_shuffled or y_df_preprocessed: Preprocessed target data.
     """
     x_df_scaled = scale_last_columns(x_df)
     
@@ -281,21 +281,17 @@ def metrics(x_train, x_train_preprocessed):
         x_train (pd.DataFrame): Original data.
         x_train_preprocessed (pd.DataFrame): Preprocessed data.
     """
-    # Compute and print dimensions
     print("Dimensions of the DataFrame (original):", x_train.shape)
     print("Dimensions of the DataFrame (after preprocessing):", x_train_preprocessed.shape)
 
-    # Exclude the first row and column for calculations
     x_cut = x_train.iloc[1:, 1:]
     x_cut_p = x_train_preprocessed.iloc[1:, 1:]
 
-    # Compute and print mean
     mean_value_x_train = x_cut.values.mean()
     mean_value_x_train_preprocessed = x_cut_p.values.mean()
     print("\nMean of all values (original):", mean_value_x_train)
     print("Mean of all values (after preprocessing):", mean_value_x_train_preprocessed)
 
-    # Compute and print max and min
     max_value_x_train = np.max(x_cut.values)
     min_value_x_train = np.min(x_cut.values)
     max_value_x_train_preprocessed = np.max(x_cut_p.values)
@@ -303,13 +299,11 @@ def metrics(x_train, x_train_preprocessed):
     print("\nMax value (original):", max_value_x_train, "Min value (original):", min_value_x_train)
     print("Max value (after preprocessing):", max_value_x_train_preprocessed, "Min value (after preprocessing):", min_value_x_train_preprocessed)
 
-    # Compute and print standard deviation
     std_x_train = x_cut.values.std()
     std_x_train_preprocessed = x_cut_p.values.std()
     print("\nStandard deviation (original):", std_x_train)
     print("Standard deviation (after preprocessing):", std_x_train_preprocessed)
 
-    # Compute and print variance
     var_x_train = x_cut.values.var()
     var_x_train_preprocessed = x_cut_p.values.var()
     print("\nVariance (original):", var_x_train)
