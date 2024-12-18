@@ -9,15 +9,15 @@ The project is organized as follows:
 ├── data/                                   # Contains data files
 │ ├── Proteome_1011/                        # Contains all the fasta files corresponding to all yeasts' genotypes of each protein
 │ ├── copy_number_variation_dataset.csv     # Contains all the copy number variations for all yeasts
-│ ├── extended_mutations_[phenotype].csv    # Contains all the specific mutations for all yeasts
+│ ├── extended_mutations_{phenotype}.csv    # Contains all the specific mutations for all yeasts
 │ ├── Finalset_223phenotypes_1011.tab       # Contains all the phenotypes for all yeasts
 │ ├── genesMatrix_CopyNumber.csv            # Contains all the copy number variations for all yeasts, as a table
 │ ├── mutations_dataset.csv                 # Contains all the mutations for all yeasts, as a list
 │ ├── phenotype_dataset.csv                 # Contains all the phenotypes for all yeasts, for easir label??
-│ ├── X_matrix_[phenotype].csv              # Contains all the specific mutations and copy number variations for all yeasts
-│ ├── y_[phenotype].csv                     # Contains the phenotype of interest for all yeasts
+│ ├── X_matrix_{phenotype}.csv              # Contains all the specific mutations and copy number variations for all yeasts
+│ ├── y_{phenotype}.csv                     # Contains the phenotype of interest for all yeasts
 ├── extract_data/                                       # To extract data of our interest
-│ ├── extract_data_mutations.ipynb                      # To extract the matrix of mutations and y_[phenotype]
+│ ├── extract_data_mutations.ipynb                      # To extract the matrix of mutations and y_{phenotype}
 │ ├── extract_data_proteins.ipynb                       # To extract the matrix of proteins mutated
 │ ├── extract_mutations_from_important_proteins.ipynb   # To extract the matrix of mutations from the important proteins
 │ ├── extract_proteins_results.ipynb                    # To extract the results of models run on the matrix of proteins mutated
@@ -52,7 +52,7 @@ The dataset used in this project has been extracted from yeasts' genotypes, trad
 
 ##### Example Data Structure:
 	•	X_matrix  : Input features (mutations + copy number variations)
-	•	y_[phenotype] : Phenotype of interest
+	•	y_{phenotype} : Phenotype of interest
 
 ## Main Features
 The project includes the following functionalities:
@@ -62,7 +62,7 @@ The project includes the following functionalities:
 2. Remove Correlated Features on Copy number variations
 3. PCA on Copy number variations
 4. Shuffling  
-5. Min-Max on y_[phenotype] (Optional)  
+5. Min-Max on y_{phenotype} (Optional)  
 
 These preprocessing steps collectively decrease dimension, to facilitate model application. This thorough data preparation process aids in achieving robust and reliable predictions.
 
@@ -86,7 +86,7 @@ You must choose the model you want to try on the dataset, and run every cell unt
 For the 3rd step : "initialization of the parameters for model training", you can choose the cell to run according to the model that you would like to use for making your predictions.
 
 1. Extracting data:   
-All original data are in the `data/` repository. You must choose the phenotype you are interested in (e.g. `YPD_doublingtime`). To extract the X_matrix_[phenotype] and y_[phenotype], you must run all the cells in the `extract_data_ipynb.ipynb`. You will finally get phenotype_dataset, copy_number_variation_dataset, mutations_dataset, extended_mutations_[phenotype], X_matrix_[phenotype], and y_[phenotype], as well as some plots to describe the datasets, which can be found in `results/plots/` repository.
+All original data are in the `data/` repository. You must choose the phenotype you are interested in (e.g. `YPD_doublingtime`). To extract the X_matrix_{phenotype} and y_{phenotype}, you must run all the cells in the `extract_data_mutations.ipynb`. You will finally get phenotype_dataset, copy_number_variation_dataset, mutations_dataset, extended_mutations_{phenotype}, X_matrix_{phenotype}, and y_{phenotype}, as well as some plots to describe the datasets, which can be found in `results/plots/` repository. Then, you can extract the X_matrix (proteins+CNVs) in the `extract_data_proteins.ipynb`. After thtat you can extract the mutations X_matrix from these important proteins with the `extract_mutations_from_important_proteins.ipynb`.
 
 2. (Optional) Preprocessing data: 
 Before training a model, data must be preprocessed. This includes:   
@@ -94,7 +94,7 @@ Before training a model, data must be preprocessed. This includes:
 •	Removing Correlated Features with `remove_low_variance_features_last_columns()`.
 •	Applying PCA with `apply_pca_last_columns()`.
 •	Shuffling with `shuffle_dataset()`.
-•	(Optional) Applying Min-Max to y_[phenotype] with `y_preprocessing()`.
+•	(Optional) Applying Min-Max to y_{phenotype} with `y_preprocessing()`.
 
 All the preprocessing is done by calling the function `preprocessed_data()`, found in the file `preprocessing.py`, called at the begining of many `model_[model].ipynb` files.
 
