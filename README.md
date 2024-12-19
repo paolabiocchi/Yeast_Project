@@ -16,6 +16,7 @@ The project is organized as follows:
 │ ├── phenotype_dataset.csv                 # Contains all the phenotypes for all yeasts, for easir label??
 │ ├── X_matrix_{phenotype}.csv              # Contains all the specific mutations and copy number variations for all yeasts
 │ ├── y_{phenotype}.csv                     # Contains the phenotype of interest for all yeasts
+│ ├── X_matrix_YPD_doublingtime_sample.csv  # Sample of X_matrix_YPD_doublingtime.csv
 │ ├── ...                                   # Contains other data files (pickle, restricted...)
 ├── extract_data/                                       # To extract data of our interest
 │ ├── extract_data_mutations.ipynb                      # To extract the matrix of mutations and y_{phenotype}
