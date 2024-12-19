@@ -109,7 +109,7 @@ All `model_[model].ipynb` models can be run. They all use cross-validation to fi
 After training, you can save your model and Shap results in the `results/`folder using `save_and_compare_results()` function found in the file of the same name. You can also make different graphs using `matplotlib.pyplot`. You can then write your top 10 features in the `analyse.txt` file.
 
 ## Sample usage
-As the original datasets are too large to be important on Github, we created a sample of X_matrix_{phenotype} so that you can use the code. Obviously, you won't get relevant and optimal results, but you will be able to have an idea of how the code runs.
+As the original datasets are too large to be imported on Github, we created a sample of X_matrix_{phenotype} so that you can use the code. Obviously, you won't get relevant and optimal results, but you will be able to have an idea of how the code runs.
 
 ## Possible improvements  
 • Implement other classification models such as BERT.  
