@@ -35,6 +35,9 @@ The project is organized as follows:
 ├── save_and_compare_results.py     # To save and compare model and Shap results
 
 ```
+Most of the data are not available on GitHub due to the limited storage. We can download it on  http://1002genomes.u-strasbg.fr/files/. Otherwise, we provide a sample of the data, X_matrix_YPD_doublingtime_sample.csv, to have an example of what the dataset looks like.  
+
+
 ## **Installation and Dependencies**
 ##### Prerequisites
 Ensure that you have the Python 3.7 or more recent versions. You can install the dependencies using the `pip` commands.
