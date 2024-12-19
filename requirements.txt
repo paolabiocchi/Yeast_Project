@@ -206,7 +206,7 @@ scipy=1.14.1=py310hefd78d6_2
 seaborn=0.13.2=hd8ed1ab_3
 seaborn-base=0.13.2=pyhd8ed1ab_3
 setuptools=75.1.0=py310hecd8cb5_0
-shap=0.46.0=cpu_py310h4c74600_1
+shap=0.46.0=py310haa95532_0
 six=1.17.0=pyhd8ed1ab_0
 skorch=1.0.0=pyhecae5ae_0
 slicer=0.0.8=pyhd8ed1ab_0
