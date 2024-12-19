@@ -13,7 +13,7 @@ The project is organized as follows:
 │ ├── Finalset_223phenotypes_1011.tab       # Contains all the phenotypes for all yeasts
 │ ├── genesMatrix_CopyNumber.csv            # Contains all the copy number variations for all yeasts, as a table
 │ ├── mutations_dataset.csv                 # Contains all the mutations for all yeasts, as a list
-│ ├── phenotype_dataset.csv                 # Contains all the phenotypes for all yeasts, for easir label??
+│ ├── phenotype_dataset.csv                 # Contains all the phenotypes for all yeasts, for easier labelling
 │ ├── X_matrix_{phenotype}.csv              # Contains all the specific mutations and copy number variations for all yeasts
 │ ├── y_{phenotype}.csv                     # Contains the phenotype of interest for all yeasts
 │ ├── X_matrix_YPD_doublingtime_sample.csv  # Sample of X_matrix_YPD_doublingtime.csv
@@ -23,6 +23,7 @@ The project is organized as follows:
 │ ├── extract_data_proteins.ipynb                       # To extract the matrix of proteins mutated
 │ ├── extract_mutations_from_important_proteins.ipynb   # To extract the matrix of mutations from the important proteins
 │ ├── extract_proteins_results.ipynb                    # To extract the results of models run on the matrix of mutated proteins
+│ ├── extract_effects_plots.ipynb                       # To extract the plots of the effects of changes in specific proteins on the phenotype
 ├── models/                         # All models
 ├── results/                        # Contains results files
 │ ├── plots/                        # Contains all plots (CNV per protein, mutation per protein, mutation per yeast)
@@ -31,7 +32,6 @@ The project is organized as follows:
 ├── preprocessing.py                # To preprocess the data
 ├── README.md                       # Project documentation  
 ├── requirements.txt                # For all external libraries used
-├── run.ipynb                       # To make all process of learning and predicting  
 ├── save_and_compare_results.py     # To save and compare model and Shap results
 
 ```
@@ -56,7 +56,7 @@ Ensure that you have the Python 3.7 or more recent versions. You can install the
 The dataset used in this project has been extracted from yeasts' genotypes, traducting specific proteins. It includes features that are a mix of each specific mutation which have been found in at least 2 yeasts' genotypes, and all the copy number variations for all yeasts. The target variable is the yeast's doubling time. However, we are more interested in understanding the relationship between the features and the target variable, thus knowning the most impactful mutations and copy number variations.
 
 ##### Example Data Structure:
-	•	X_matrix  : Input features (mutations + copy number variations)
+	•	X_matrix_{phenotype}  : Input features (mutations + copy number variations)
 	•	y_{phenotype} : Phenotype of interest
 
 ## Main Features
@@ -107,6 +107,9 @@ All `model_[model].ipynb` models can be run. They all use cross-validation to fi
 
 4. Results:  
 After training, you can save your model and Shap results in the `results/`folder using `save_and_compare_results()` function found in the file of the same name. You can also make different graphs using `matplotlib.pyplot`. You can then write your top 10 features in the `analyse.txt` file.
+
+## Sample usage
+As the original datasets are too large to be important on Github, we created a sample of X_matrix_{phenotype} so that you can use the code. Obviously, you won't get relevant and optimal results, but you will be able to have an idea of how the code runs.
 
 ## Possible improvements  
 • Implement other classification models such as BERT.  
